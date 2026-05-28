@@ -89,6 +89,14 @@ Available Options:
 * Option `USE_RANDOM_ALT`  
   Set to "yes" if you want randomly chosen alternative (_altX) PIX as well.  
   Set to "no" (default) if you just want to use the "normal" PIX.  
+
+* Option `OUTPUT_BACKEND`  
+  Set to `i2c` for a directly attached OLED on MiSTer's I2C bus. This is the default and preserves existing behavior.  
+  Set to `adapt` to send the same 128x64 i2c2oled artwork to a Reflex Adapt over its USB serial/control port.  
+
+* Option `ADAPT_TTY`  
+  Optional serial device for the Reflex Adapt backend, for example `/dev/ttyACM0`.  
+  Leave empty to auto-detect the first Reflex/Adapt USB serial device.  
  
 * Options for the **Screensaver**  
   `SCREENSAVER="no"`  

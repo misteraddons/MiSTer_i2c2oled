@@ -109,21 +109,31 @@
 # Lookup for i2c Device
 dbug "i2c2oled Hardware check."
 #echo -e "\n\n${fyellow}i2c2oled Hardware check.${freset}"
-mapfile -t i2cdata < <(i2cdetect -y ${i2cbus})
-for i in $(seq 1 ${#i2cdata[@]}); do
-  i2cline=(${i2cdata[$i]})
-  echo ${i2cline[@]:1} | grep -q ${oledid}
-  if [ $? -eq 0 ]; then
-    #echo -e "${fgreen}OLED at 0x${oledid} found, proceed...${freset}"
-    dbug "OLED at 0x${oledid} found, proceed..."
+if output_is_adapt; then
+  if find_adapt_tty >/dev/null; then
+    dbug "Reflex Adapt serial OLED backend found, proceed..."
     oledfound="true"
+  else
+    dbug "Reflex Adapt serial OLED backend not found, end here!"
+    exit 1
   fi
-done
+else
+  mapfile -t i2cdata < <(i2cdetect -y ${i2cbus})
+  for i in $(seq 1 ${#i2cdata[@]}); do
+    i2cline=(${i2cdata[$i]})
+    echo ${i2cline[@]:1} | grep -q ${oledid}
+    if [ $? -eq 0 ]; then
+      #echo -e "${fgreen}OLED at 0x${oledid} found, proceed...${freset}"
+      dbug "OLED at 0x${oledid} found, proceed..."
+      oledfound="true"
+    fi
+  done
 
-if [ "${oledfound}" = "false" ]; then
-  #echo -e "${fred}OLED at 0x${oledid} not found, end here!${freset}"
-  dbug "OLED at 0x${oledid} not found, end here!"
-  exit 1
+  if [ "${oledfound}" = "false" ]; then
+    #echo -e "${fred}OLED at 0x${oledid} not found, end here!${freset}"
+    dbug "OLED at 0x${oledid} not found, end here!"
+    exit 1
+  fi
 fi
 
 if [ ! -e  ${initfile} ]; then
