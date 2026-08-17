@@ -218,6 +218,7 @@ while true; do								# main loop
 	  SCREENSAVER_COUNTER=0												# Reset ScreenSaver Counter
       #echo "SCREENSAVER_COUNTER: ${SCREENSAVER_COUNTER}"				# debug
       oldcore=${newcore}												# Update oldcore Variable
+      continue														# Re-read before blocking; a core can change while art is being sent
     fi  																# endif Core check
     
     if [ "${SHOW_TEMP}" = "yes" ]; then
